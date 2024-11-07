@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Coroutine, Any
 from uuid import uuid4
 from fastapi import FastAPI
 from jinja2 import Template
@@ -8,7 +8,17 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from api.users import Router as users_router
+from api.products import ProductRouter
+from middlewares.auth import authenticate_user
+from functools import partial
+
 app = FastAPI()
+
+
+
+auth: partial[Coroutine[Any, Any, Any]] = partial(authenticate_user)
+
+app.middleware("http")(auth)
 
 
 
@@ -18,7 +28,7 @@ def respond():
 
 
 app.include_router(users_router, tags=["users"])
-
+app.include_router(ProductRouter, tags=["products"])
 
 
 if __name__ == "__main__":

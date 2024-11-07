@@ -11,9 +11,7 @@ from lib.config import JWT_SECRET
 
 
 def create_user_response(user: UserModel, db: Session) -> tuple[ResponseModel, UserResponseModel | None]:
-
     db_user = db.query(User).filter(User.email == user.email).first()
-    
     if(db_user):
         return ResponseModel(status=Http.StatusBadRequest, message="User already exists"), None
     

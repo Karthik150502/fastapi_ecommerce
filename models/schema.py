@@ -15,6 +15,28 @@ class UserSigninResponse(BaseModel):
     token: str
 
 
+
+class ProductModel(BaseModel):
+    name: str
+    price: float
+    quantity: int
+    image: Optional[str] = None
+    description: Optional[str] = None
+    added_by: str
+
+
+class ProductResponse(BaseModel):
+    id: str
+    name: str
+    price: float
+    quantity: int
+    image: Optional[str] = None
+    description: Optional[str] = None
+    added_by: str
+    created_at: datetime
+    updated_at: datetime
+
+
 class UserSigninModel(BaseModel):
     email: str
     password: str
@@ -25,18 +47,6 @@ class UserResponseModel(BaseModel):
     email: str
     balance: float
 
-class ProductModel(BaseModel):
-    name: str
-    price: float
-    quantity: int
-    description: Optional[str] = None
-
-class ProductResponseModel(BaseModel):
-    id: str
-    name: str
-    price: float
-    quantity: int
-    description: Optional[str] = None
 
 
 class ResponseModel(BaseModel):
@@ -49,6 +59,8 @@ class FastAPIResponseWrapper(BaseModel):
     data: (
         UserResponseModel
         | List[UserResponseModel]
-        | UserSigninResponse
+        | UserSigninResponse 
+        | ProductResponse
+        | List[ProductResponse]
         | None
     )
