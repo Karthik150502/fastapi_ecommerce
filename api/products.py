@@ -6,7 +6,7 @@ from db.database import getDb
 from controllers.products import create_product 
 from models.response import Http
 
-from models.schema import ProductModel, FastAPIResponseWrapper
+from models.types import ProductModel, FastAPIResponseWrapper
 
 
 ProductRouter = APIRouter(

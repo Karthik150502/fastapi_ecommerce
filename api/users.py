@@ -2,15 +2,14 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from db.database import getDb
-from controllers.user import create_user_response, get_all_users_response, get_single_user_response, signin
+from controllers.user import create_user_response, get_all_users_response, get_single_user_response, signin, onramp_user
 from models.response import Http
-from models.schema import UserModel, UserSigninModel, FastAPIResponseWrapper, ResponseModel
-from middlewares.auth import authenticate_user
+from models.types import UserModel, UserSigninModel, FastAPIResponseWrapper, ResponseModel, UserOnRamp
 
 
 
 Router = APIRouter(
-    prefix="/users",
+    prefix="/user",
 )
 
 
@@ -20,6 +19,11 @@ async def create_user(user: UserModel, db: Session = Depends(getDb)):
     response, data = create_user_response(user, db)
     return FastAPIResponseWrapper(response=response, data=data)
 
+
+@Router.post("/onramp", response_model=FastAPIResponseWrapper)
+def user_onramp(body:UserOnRamp,  db: Session = Depends(getDb)):
+    response, data = onramp_user(db, body)
+    return FastAPIResponseWrapper(response=response, data=data)
 
 @Router.get("/{userid}", response_model=FastAPIResponseWrapper)
 def get_users(userid: str, db: Session = Depends(getDb)):

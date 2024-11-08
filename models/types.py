@@ -15,6 +15,15 @@ class UserSigninResponse(BaseModel):
     token: str
 
 
+class UserOnRamp(BaseModel):
+    amount:int
+
+
+class UserOnRampResponse(BaseModel):
+    amount: int
+    userid: int
+    current_balance:int
+
 
 class ProductModel(BaseModel):
     name: str
@@ -60,7 +69,16 @@ class FastAPIResponseWrapper(BaseModel):
         UserResponseModel
         | List[UserResponseModel]
         | UserSigninResponse 
-        | ProductResponse
-        | List[ProductResponse]
+        | List[ProductResponse] 
+        | UserOnRampResponse
         | None
     )
+
+
+class ProductResponse(BaseModel):
+    response: ResponseModel
+    data: ProductResponse | None
+
+
+class UnAuthorizedResponse(BaseModel):
+    response: ResponseModel

@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, String, ForeignKey,  Text, Numeric, DateTime, func, JSON, Enum as SQLEnum
+from sqlalchemy import Column, String, ForeignKey,  Text, Numeric, DateTime, func, JSON, Enum as SQLEnum, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -38,4 +38,5 @@ class Product(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     added_by = Column(UUID, ForeignKey('users.id'), nullable=False)
-    quantity = Column(Numeric(10), nullable=False, default=0)
+    sku = Column(Numeric(10), nullable=False, default=0)
+    status = Column(Boolean, nullable=False, default=True)

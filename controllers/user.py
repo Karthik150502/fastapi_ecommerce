@@ -1,7 +1,7 @@
 import bcrypt
 import jwt
 from db.models import User
-from models.schema import UserModel, UserResponseModel, ResponseModel, UserSigninModel, UserSigninResponse, FastAPIResponseWrapper
+from models.types import UserModel, UserResponseModel, ResponseModel, UserSigninModel, UserSigninResponse, FastAPIResponseWrapper, UserOnRamp, UserOnRampResponse
 from models.response import Http
 from sqlalchemy.orm import Session
 
@@ -37,7 +37,7 @@ def create_user_response(user: UserModel, db: Session) -> tuple[ResponseModel, U
 
 def get_all_users_response(db:Session) -> tuple[ResponseModel, List[UserResponseModel]]:
     users = db.query(User).all()    
-    response = ResponseModel(status=Http.StatusOk, message="User Fetched successfully.")
+    response = ResponseModel(status=Http.StatusOk, message="User singed up successfully.")
     result = [
         UserResponseModel(
             id=str(user.id),
@@ -51,7 +51,7 @@ def get_all_users_response(db:Session) -> tuple[ResponseModel, List[UserResponse
         
 def get_single_user_response(db:Session, userid:str) -> tuple[ResponseModel, UserResponseModel]:
     user = db.query(User).filter(User.id == userid).first()
-    response = ResponseModel(status=Http.StatusOk, message="User Fetched successfully.")
+    response = ResponseModel(status=Http.StatusOk, message="User signed in successfully.")
     result = UserResponseModel(
         id=str(user.id),
         username=user.email,
@@ -59,10 +59,6 @@ def get_single_user_response(db:Session, userid:str) -> tuple[ResponseModel, Use
         balance=user.balance
     )
     return response, result
-
-
-
-  
 
 def signin(db: Session, user: UserSigninModel):
     userExists = db.query(User).filter(User.email == user.email).first()
@@ -77,13 +73,25 @@ def signin(db: Session, user: UserSigninModel):
     jwtPayload = {
         "id": str(userExists.id),
         "email": userExists.email
-    }
-
-
+    }   
 
     token = jwt.encode(payload=jwtPayload,key=JWT_SECRET)
 
     userSigninResponse = UserSigninResponse(id=str(userExists.id), email=userExists.email, token="Bearer " + token)
     response = ResponseModel(status=Http.StatusOk, message="User logged in successfully.")  
     return FastAPIResponseWrapper(response=response, data=userSigninResponse)
+    
+
+def onramp_user(db: Session, data: UserOnRamp)-> tuple[ResponseModel, UserOnRampResponse]:
+    response = ResponseModel(status=Http.StatusOk, message="User onramped successfully.")
+    res = UserOnRampResponse(amount=5, userid=4, current_balance=54)
+    return response, res
+
+
+
+
+
+
+
+
 
