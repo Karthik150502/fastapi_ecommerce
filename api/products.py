@@ -1,14 +1,12 @@
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-from typing import List, Union
 from db.database import getDb
 from controllers.products import create_product 
 from models.response import Http
 
 from models.types import ProductModel, ProductCreateResponse
 from middlewares.auth import get_user
-from models.types import AuthToken
 
 
 ProductRouter = APIRouter(

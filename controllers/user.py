@@ -51,7 +51,7 @@ def get_all_users_response(db:Session) -> tuple[ResponseModel, List[UserResponse
         
 def get_single_user_response(db:Session, userid:str) -> tuple[ResponseModel, UserResponseModel]:
     user = db.query(User).filter(User.id == userid).first()
-    response = ResponseModel(status=Http.StatusOk, message="User signed in successfully.")
+    response = ResponseModel(status=Http.StatusOk, message="User fetched successfully.")
     result = UserResponseModel(
         id=str(user.id),
         username=user.email,

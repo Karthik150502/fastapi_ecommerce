@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from db.database import getDb
 from controllers.user import create_user_response, get_all_users_response, get_single_user_response, signin, onramp_user
 from models.response import Http
-from models.types import UserModel, UserSigninModel, FastAPIResponseWrapper, ResponseModel, UserOnRamp, AuthToken
+from models.types import UserModel, UserSigninModel, FastAPIResponseWrapper, ResponseModel, UserOnRamp
 from middlewares.auth import get_user
 
 
@@ -29,13 +29,7 @@ def user_onramp(body: UserOnRamp,  request: Request, db: Session = Depends(getDb
 
 @Router.get("/{userid}", response_model=FastAPIResponseWrapper)
 def get_users(userid: str, db: Session = Depends(getDb)):
-    response = ResponseModel(status=Http.StatusOk, message="User Fetched successfully.")
-    data = {
-            "id": userid,
-            "username": userid,
-            "email": userid,
-            "balance": 0.00 
-    }
+    response, data = get_single_user_response(db, userid)
     return FastAPIResponseWrapper(response=response, data=data)
 
 

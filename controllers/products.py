@@ -1,16 +1,13 @@
-import bcrypt 
-import jwt 
-
 
 
 from db.models import User, Product
-from models.types import ProductModel, ResponseModel, ProductResponse
+from models.types import ProductModel, ResponseModel
 from models.response import Http
 from sqlalchemy.orm import Session
 
 
-from typing import List, Tuple
-from lib.config import JWT_SECRET
+from typing import Tuple
+
 
 
 def create_product(product: ProductModel, db: Session, user_id: str)-> Tuple[ResponseModel, ProductModel | None]:
