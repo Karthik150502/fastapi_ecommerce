@@ -9,16 +9,19 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from api.users import Router as users_router
 from api.products import ProductRouter
+from api.purchases import PurchasesRouter
 # from middlewares.auth import authenticate_user
 from functools import partial
-from middlewares.auth2 import AuthenticationMiddleware
+from middlewares.auth import AuthenticationMiddleware
 app = FastAPI()
 
 
 
 # auth: partial[Coroutine[Any, Any, Any]] = partial(authenticate_user)
-
 # app.middleware("http")(auth)
+
+
+
 
 app.add_middleware(AuthenticationMiddleware)
 
@@ -29,6 +32,7 @@ def respond():
 
 app.include_router(users_router, tags=["users"])
 app.include_router(ProductRouter, tags=["products"])
+app.include_router(PurchasesRouter, tags=["purchases"])
 
 
 if __name__ == "__main__":

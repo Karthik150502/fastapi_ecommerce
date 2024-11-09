@@ -82,9 +82,19 @@ def signin(db: Session, user: UserSigninModel):
     return FastAPIResponseWrapper(response=response, data=userSigninResponse)
     
 
-def onramp_user(db: Session, data: UserOnRamp)-> tuple[ResponseModel, UserOnRampResponse]:
+def onramp_user(db: Session, data: UserOnRamp, userid: str)-> tuple[ResponseModel, UserOnRampResponse]:
+
+    user = db.query(User).filter(User.id == userid).first()
+    if(not user):
+        response = ResponseModel(status=Http.StatusBadRequest, message="User not found.")
+        return response, None
+
+
+    user.balance = float(user.balance) + data.amount
+    db.commit()
+    db.refresh(user)   
     response = ResponseModel(status=Http.StatusOk, message="User onramped successfully.")
-    res = UserOnRampResponse(amount=5, userid=4, current_balance=54)
+    res = UserOnRampResponse(amount=data.amount, userid=str(user.id), current_balance=user.balance)
     return response, res
 
 

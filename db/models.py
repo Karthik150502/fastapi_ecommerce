@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, String, ForeignKey,  Text, Numeric, DateTime, func, JSON, Enum as SQLEnum, Boolean
+from sqlalchemy import Column, String, ForeignKey,  Text, Numeric, DateTime, func, JSON, Enum as SQLEnum, Boolean, Float
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -20,7 +20,7 @@ class User(Base):
     id = Column(UUID, primary_key=True, default=uuid.uuid4)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
-    balance = Column(Numeric(10, 2), nullable=False, default=0.00)
+    balance = Column(Float(10, 2), nullable=False, default=0.00)
     type = Column(SQLEnum(UserRole), nullable=False, default=UserRole.user)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
@@ -40,3 +40,12 @@ class Product(Base):
     added_by = Column(UUID, ForeignKey('users.id'), nullable=False)
     sku = Column(Numeric(10), nullable=False, default=0)
     status = Column(Boolean, nullable=False, default=True)
+
+
+class UserPurchases(Base):
+    __tablename__ = 'user_purchases'
+    id = Column(UUID, primary_key=True, default=uuid.uuid4)
+    product_id = Column(UUID, ForeignKey('products.id'), nullable=False)
+    user_id = Column(UUID, ForeignKey('users.id'), nullable=False)
+    quantity = Column(Numeric(10), nullable=False, default=1)
+

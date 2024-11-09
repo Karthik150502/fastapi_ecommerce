@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 
 
+
 class UserModel(BaseModel):
     email: str
     password: str
@@ -16,13 +17,13 @@ class UserSigninResponse(BaseModel):
 
 
 class UserOnRamp(BaseModel):
-    amount:int
+    amount:float
 
 
 class UserOnRampResponse(BaseModel):
-    amount: int
-    userid: int
-    current_balance:int
+    amount: float
+    userid: str
+    current_balance: float
 
 
 class ProductModel(BaseModel):
@@ -31,7 +32,12 @@ class ProductModel(BaseModel):
     quantity: int
     image: Optional[str] = None
     description: Optional[str] = None
-    added_by: str
+
+
+
+
+class AuthToken(BaseModel):
+    token: str
 
 
 class ProductResponse(BaseModel):
@@ -50,6 +56,18 @@ class UserSigninModel(BaseModel):
     email: str
     password: str
 
+
+class PurchaseModel(BaseModel):
+    product_id: str
+    quantity: int
+
+class PurchaseResponse(BaseModel):
+    user_id: str
+    product_id: str
+    quantity: int
+    price: float
+
+
 class UserResponseModel(BaseModel):
     id: str
     username: str
@@ -60,7 +78,7 @@ class UserResponseModel(BaseModel):
 
 class ResponseModel(BaseModel):
     status: int
-    message: str
+    message: str | dict
 
 
 class FastAPIResponseWrapper(BaseModel):
@@ -75,9 +93,15 @@ class FastAPIResponseWrapper(BaseModel):
     )
 
 
-class ProductResponse(BaseModel):
+class ProductCreateResponse(BaseModel):
     response: ResponseModel
-    data: ProductResponse | None
+    data: ProductModel | None
+
+
+class PurchaseResponseWrapper(BaseModel):
+    response: ResponseModel
+    data: (PurchaseResponse | None)
+
 
 
 class UnAuthorizedResponse(BaseModel):
