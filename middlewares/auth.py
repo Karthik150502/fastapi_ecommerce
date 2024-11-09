@@ -56,9 +56,7 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
         match request.method:
             case "POST":
                 match request.url.path:
-                    case "/product":   
-                        print("The request body for products = ")
-                    case "/user/onramp":
+                    case ("/user/onramp" | "/purchase"  | "/product"):
                         try:
                             jwtPayload = get_user(token)
                         except:
